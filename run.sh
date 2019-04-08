@@ -15,5 +15,8 @@ certbot delete --cert-name $cert_name
 certbot certonly    --expand   --keep  --text --server "$URL" --agree-tos --email  $EMAIL --standalone\
      --preferred-challenges http-01 -d $DOMAINS
 
-cat /etc/letsencrypt/live/$cert_name/fullchain.pem > /certs/fullchain.pem
+sleep 2
+rm /certs/fullchain.pem
+rm /certs/privkey.pem
+cat /etc/letsencrypt/live/$cert_name/fullchain.pem >  /certs/fullchain.pem
 cat /etc/letsencrypt/live/$cert_name/privkey.pem > /certs/privkey.pem
