@@ -1,18 +1,21 @@
 #!/bin/sh
+set -x
 
-if [ "$URL" = "" ];
-then
-    export URL="https://acme-v01.api.letsencrypt.org/directory"
-fi
 if [ "$STAGING" != "" ];
 then
     export URL="https://acme-staging.api.letsencrypt.org/directory"
 fi
+
+if [ "$URL" != "" ];
+then
+    export URL="--server  $URL"
+fi
+
 cert_name="`echo $DOMAINS | tail -n1 | cut -d',' -f1`"
 
 certbot delete --cert-name $cert_name
 
-certbot certonly    --expand   --keep  --text --server "$URL" --agree-tos --email  $EMAIL --standalone\
+certbot certonly    --expand   --keep  --text $URL --agree-tos --email  $EMAIL --standalone\
      --preferred-challenges http-01 -d $DOMAINS
 
 sleep 2
